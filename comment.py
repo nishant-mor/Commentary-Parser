@@ -67,9 +67,10 @@ def Separate(content):
 	Run = 0
 	Wicket = ""
 	status = ""
-	Runstatus = "False"
-	Outstatus = "False"
+	Runstatus = False
+	Outstatus = False
 	total = 0
+	wide = False
 	for comment1 in content:
 		comment = comment1.split()
 		#print(comment)
@@ -80,9 +81,18 @@ def Separate(content):
 			if x[-1]==",":
 				Batsman = x[:-1]
 				status = comment[3]
+				if comment[4] =="wide," :
+					wide = True
+				else: 
+					wide= False
+
 			else:
 				Batsman = comment[2]+ " " +comment[3][:-1]
 				status = comment[4]
+				if comment[5] =="wide," :
+					wide = True
+				else: 
+					wide = False
 
 
 		else :
@@ -91,9 +101,20 @@ def Separate(content):
 			if x[-1]==",":
 				Batsman = x[:-1]
 				status = comment[4]
+				if comment[5] =="wide," :
+					wide = True
+				else:
+					wide = False
+
 			else:
 				Batsman = comment[3]+ " " +comment[4][:-1]
 				status = comment[5]
+				if comment[6] =="wide," :
+					wide = True
+				else:
+					wide = False
+
+
 
 		if status=="no":
 				run = 0
@@ -120,7 +141,7 @@ def Separate(content):
 		if Runstatus:
 			total+=run
 
-		print(bowler , "       " , Batsman  , "     " , run , "   " , Runstatus)
+		print(bowler , "       " , Batsman  , "     " , run , "   " , Runstatus   , "wide=" , wide)
 		print(total)
 
 
