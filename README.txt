@@ -1,6 +1,10 @@
-I am grabbing all the data from web itself and I have used two python library => requests and bs4 from grabbing the source code.
-python code will generate the mysl commands to populate the commentary table
 
+Getting Ball by Ball commentary from the ESPN Cricketinfo website and populating the data in mysql table for any subsequent operations on the data. 
+
+
+Library Used: 
+1. Requests 
+2. Beautiful Soup.
+
+Usage: 
 python comment.py > sql_commands.sql
-
-then in mysql source sql_commands.sql
