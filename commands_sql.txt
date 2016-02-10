@@ -1,0 +1,8 @@
+
+ create table commentary(id INT PRIMARY KEY AUTO_INCREMENT , bowler VARCHAR(60) , batsman VARCHAR(60) , run INT , out_status VARCHAR(10),  wide VARCHAR(10) , no_ball VARCHAR(10) , leg VARCHAR(10) , TEAM_ID INT);
+
+  create table scores(name varchar(50) , runs int(20) , balls int , fours int , sixes int , sr float(5,2) , team_id int  );
+
+
+  create table wicket(name varchar(50) , wickets int , runs int , economy float(5,2) , fours int , sixes int , no_ball int , wide int , team_id int );
+

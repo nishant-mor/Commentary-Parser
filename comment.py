@@ -1,16 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 
-
-
-
 over = []
 text = []
 new = []
-def comment():
-	#https://www.thenewboston.com/forum/category.php?id=7
 
-		url = 'http://www.espncricinfo.com/australia-v-india-2015-16/engine/match/895811.html?innings=1;view=commentary'
+Team_id = 1 
+
+def comment():
+
+		url = 'http://www.espncricinfo.com/australia-v-india-2015-16/engine/match/895815.html?innings='
+		url+=str(Team_id)
+		url+=';view=commentary'
 		source_code = requests.get(url)   # source code of page
 		plain_text = source_code.text
 		soup = BeautifulSoup(plain_text)
@@ -71,6 +72,7 @@ def Separate(content):
 	Outstatus = False
 	total = 0
 	wide = False
+	no_ball = False
 	for comment1 in content:
 		comment = comment1.split()
 		#print(comment)
@@ -83,8 +85,21 @@ def Separate(content):
 				status = comment[3]
 				if comment[4] =="wide," :
 					wide = True
-				else: 
+				else:
 					wide= False
+				
+				if comment[3] =="(no" :
+					no_ball = True
+					status = comment[5]
+				else: 
+					no_ball= False
+
+				if comment[4] =="leg" :
+					leg = True
+				else: 
+					leg = False
+
+
 
 			else:
 				Batsman = comment[2]+ " " +comment[3][:-1]
@@ -93,6 +108,17 @@ def Separate(content):
 					wide = True
 				else: 
 					wide = False
+				
+				if comment[4] =="(no" :
+					no_ball = True
+					status = comment[6]
+				else: 
+					no_ball= False
+
+				if comment[5] =="leg" :
+					leg = True
+				else: 
+					leg = False
 
 
 		else :
@@ -106,6 +132,17 @@ def Separate(content):
 				else:
 					wide = False
 
+				if comment[4] =="(no" :
+					no_ball = True
+					status = comment[6]
+				else: 
+					no_ball= False
+
+				if comment[5] =="leg" :
+					leg = True
+				else: 
+					leg = False
+
 			else:
 				Batsman = comment[3]+ " " +comment[4][:-1]
 				status = comment[5]
@@ -114,6 +151,16 @@ def Separate(content):
 				else:
 					wide = False
 
+				if comment[5] =="(no" :
+					no_ball = True
+					status = comment[7]
+				else: 
+					no_ball= False
+
+				if comment[6] =="leg" :
+					leg = True
+				else: 
+					leg = False
 
 
 		if status=="no":
@@ -140,10 +187,39 @@ def Separate(content):
 
 		if Runstatus:
 			total+=run
+		else:
+			run=0
+		if no_ball:
+			total+=1
 
-		print(bowler , "       " , Batsman  , "     " , run , "   " , Runstatus   , "wide=" , wide)
-		print(total)
+		#print(bowler , "       " , Batsman  , "     " , run , "   " , Runstatus   , "wide=" , wide  , "no ball =" , no_ball , "leg=" , leg)
+		#print(total)
 
+		out = False
+		if Outstatus:
+			out=True
+
+
+
+		s = "INSERT into commentary(bowler , batsman , run, out_status , wide , no_ball , leg , TEAM_ID) values ( \'"
+		s+= bowler
+		s+="\' , \'"
+		s+= Batsman
+		s+="\' , "
+		s+=str(run)
+		s+=" , \'"
+		s+=str(out) 
+		s+="\' , \'"
+		s+=str(wide) 
+		s+="\' ,\' "
+		s+=str(no_ball) 
+		s+="\' , \'"
+		s+=str(leg)
+		s+="\' ,"
+s		s+=str(Team_id)
+		s+=");" 
+
+		print(s)
 
 
 
@@ -157,7 +233,7 @@ def Insert(over , content ):
 		s+=content[i]
 		s+=' "  ); '	
 		
-		print(s,"\n")
+		#print(s,"\n")
 			#cur.execute("SELECT * FROM YOUR_TABLE_NAME")
 
 comment()
